@@ -11,7 +11,7 @@ import redisClient from './redis'; // Import Redis client module
 /**
  * Retrieves user information from the Authorization header in the request object.
  * @param {Request} req The Express request object.
- * @returns {Promise<{_id: ObjectId, email: string, password: string}>} A promise resolving to the user object.
+ * @returns {Promise<{_id: ObjectId, email: string, password: string}>} .
  */
 export const getUserFromAuthorization = async (req) => {
   // Extract authorization header from the request
@@ -51,7 +51,7 @@ export const getUserFromAuthorization = async (req) => {
 /**
  * Retrieves user information from the X-Token header in the request object.
  * @param {Request} req The Express request object.
- * @returns {Promise<{_id: ObjectId, email: string, password: string}>} A promise resolving to the user object.
+ * @returns {Promise<{_id: ObjectId, email: string, password: string}>} .
  */
 export const getUserFromXToken = async (req) => {
   // Extract token from the X-Token header
@@ -71,7 +71,8 @@ export const getUserFromXToken = async (req) => {
   }
 
   // Find user in the database using the retrieved user ID
-  const user = await (await dbClient.usersCollection()).findOne({ _id: new mongoDBCore.BSON.ObjectId(userId) });
+  const user = await (await dbClient.usersCollection())
+    .findOne({ _id: new mongoDBCore.BSON.ObjectId(userId) });
 
   // Return the user object or null if not found
   return user || null;
