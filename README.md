@@ -58,5 +58,5 @@ At the end of this project, you are expected to be able to [explain to anyone](h
 Don’t forget to run `$ npm install` when you have the `package.json`
 
 ### Authors 
-[Kuria Jeremiah](https://github.com/InfinityJer)
-Mugisha Prpsper
++ [Kuria Jeremiah](https://github.com/InfinityJer)
++ Mugisha Prpsper
