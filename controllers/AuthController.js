@@ -1,5 +1,5 @@
-import AuthController from '../controllers/AuthController';
 import sha1 from 'sha1';
+import uuidv4 from 'uuid/v4'; // Assuming you're using UUIDv4 for generating tokens
 import redisClient from '../utils/redis';
 import dbClient from '../utils/db';
 
