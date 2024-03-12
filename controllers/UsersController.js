@@ -1,5 +1,7 @@
 import sha1 from 'sha1';
+import { v4 as uuidv4 } from 'uuid';
 import dbClient from '../utils/db';
+import redisClient from '../utils/redis';
 
 const UsersController = {
   async postNew(req, res) {
@@ -31,6 +33,38 @@ const UsersController = {
       email,
     };
     return res.status(201).json(newUser);
+  },
+
+  async getMe(req, res) {
+    const token = req.headers['x-token'];
+
+    // Check if token is provided
+    if (!token) {
+      return res.status(401).json({ error: 'Unauthorized' });
+    }
+
+    // Get user ID from Redis
+    const userId = await redisClient.get(`auth_${token}`);
+
+    // Check if user ID exists
+    if (!userId) {
+      return res.status(401).json({ error: 'Unauthorized' });
+    }
+
+    // Retrieve user from database
+    const user = await dbClient.db.collection('users').findOne({ _id: userId });
+
+    // Check if user exists
+    if (!user) {
+      return res.status(401).json({ error: 'Unauthorized' });
+    }
+
+    // Return user information
+    const userInfo = {
+      id: user._id,
+      email: user.email,
+    };
+    return res.status(200).json(userInfo);
   },
 };
 
