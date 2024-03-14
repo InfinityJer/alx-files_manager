@@ -167,6 +167,9 @@ const FilesController = {
       const mimeType = mimeTypes.lookup(file.name);
       res.setHeader('Content-Type', mimeType);
       fs.createReadStream(file.localPath).pipe(res);
+
+      // Return a promise 
+      return Promise.resolve();
     } catch (error) {
       console.error(error);
       return res.status(500).json({ error: 'Server error' });
