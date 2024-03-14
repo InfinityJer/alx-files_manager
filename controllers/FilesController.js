@@ -2,6 +2,7 @@ import dbClient from '../utils/db';
 import fs from 'fs';
 import path from 'path';
 import mimeTypes from 'mime-types';
+import { v4 as uuidv4 } from 'uuid';
 
 const FilesController = {
   async postUpload(req, res) {
