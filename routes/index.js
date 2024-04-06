@@ -1,37 +1,62 @@
-// Disable ESLint for unused variables
-import { Express } from 'express';
+import express from 'express';
 import AppController from '../controllers/AppController';
-import AuthController from '../controllers/AuthController';
 import UsersController from '../controllers/UsersController';
+import AuthController from '../controllers/AuthController';
 import FilesController from '../controllers/FilesController';
-import { basicAuthenticate, xTokenAuthenticate } from '../middlewares/auth';
-import { APIError, errorResponse } from '../middlewares/error';
 
-/**
- * Attaches routes and corresponding handlers to the provided Express application.
- * @param {Express} api - The Express application instance.
- */
-const injectRoutes = (api) => {
-  api.get('/status', AppController.getStatus);
-  api.get('/stats', AppController.getStats);
+const router = express.Router();
 
-  api.get('/connect', basicAuthenticate, AuthController.getConnect);
-  api.get('/disconnect', xTokenAuthenticate, AuthController.getDisconnect);
+const routeController = (app) => {
+  app.use('/', router);
 
-  api.post('/users', UsersController.postNew);
-  api.get('/users/me', xTokenAuthenticate, UsersController.getMe);
-
-  api.post('/files', xTokenAuthenticate, FilesController.postUpload);
-  api.get('/files/:id', xTokenAuthenticate, FilesController.getShow);
-  api.get('/files', xTokenAuthenticate, FilesController.getIndex);
-  api.put('/files/:id/publish', xTokenAuthenticate, FilesController.putPublish);
-  api.put('/files/:id/unpublish', xTokenAuthenticate, FilesController.putUnpublish);
-  api.get('/files/:id/data', FilesController.getFile);
-
-  api.all('*', (req, res, next) => {
-    errorResponse(new APIError(404, `Cannot ${req.method} ${req.url}`), req, res, next);
+  // App Controller
+  router.get('/status', (req, res) => {
+    AppController.getStatus(req, res);
   });
-  api.use(errorResponse);
+
+  router.get('/stats', (req, res) => {
+    AppController.getStats(req, res);
+  });
+
+  router.post('/users', (req, res) => {
+    UsersController.postNew(req, res);
+  });
+
+  router.get('/connect', (req, res) => {
+    AuthController.getConnect(req, res);
+  });
+
+  router.get('/disconnect', (req, res) => {
+    AuthController.getDisconnect(req, res);
+  });
+
+  router.get('/users/me', (req, res) => {
+    UsersController.getMe(req, res);
+  });
+
+  router.post('/files', (req, res) => {
+    FilesController.postUpload(req, res);
+  });
+
+  router.get('/files/:id', (req, res) => {
+    FilesController.getShow(req, res);
+  });
+
+  router.get('/files', (req, res) => {
+    FilesController.getIndex(req, res);
+  });
+
+  router.put('/files/:id/publish', (req, res) => {
+    FilesController.putPublish(req, res);
+  });
+
+  router.put('/files/:id/unpublish', (req, res) => {
+    FilesController.putUnpublish(req, res);
+  });
+
+  router.post('/files/:id/data', (req, res) => {
+    FilesController.getFile(req, res);
+  });
 };
 
-export default injectRoutes;
+export default routeController;
